@@ -27,7 +27,7 @@
 ### 1. 编译并打包
 在目标设备（如 OrangePi）上运行：
 ```bash
-./build_deb.sh
+dpkg-buildpackage
 ```
 
 ### 2. 安装

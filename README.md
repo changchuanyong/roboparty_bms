@@ -27,7 +27,7 @@ An industrial-grade C++ daemon designed for TWS power battery packs. It handles 
 ### 1. Build and Package
 Run on the target device (e.g., OrangePi):
 ```bash
-./build_deb.sh
+dpkg-buildpackage
 ```
 
 ### 2. Install
