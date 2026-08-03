@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 EnvironmentFile=/etc/default/bms_daemon
-ExecStart=/usr/bin/bms_daemon ${BMS_PORT} ${BAUD_RATE} ${TIMEOUT_MS}
+ExecStart=/usr/bin/bms_daemon ${BMS_PORT} ${BAUD_RATE} ${TIMEOUT_MS} ${BMS_TYPE} ${BMS_ADDR}
 Restart=always
 RestartSec=5
 User=root
