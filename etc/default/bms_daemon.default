@@ -1,5 +1,5 @@
-# BMS Daemon Serial Port Configuration
-# Change BMS_PORT to your actual serial port path (e.g., /dev/ttyUSB1)
-BMS_PORT=/dev/serial_tws
+BMS_PORT=/dev/ttyUSB1
+BMS_TYPE=GF
 BAUD_RATE=115200
 TIMEOUT_MS=300
+BMS_ADDR=0x03

@@ -223,19 +223,19 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    int baud = (argc > 2) ? std::stoi(argv[2]) : 115200;
-    int timeout = (argc > 3) ? std::stoi(argv[3]) : 300;
+    int baud = (argc > 2) ? std::stoi(argv[2], nullptr, 0) : 115200;
+    int timeout = (argc > 3) ? std::stoi(argv[3], nullptr, 0) : 300;
 
     std::cout << "[BMS Daemon] Type=" << type << " Port=" << port
               << " Baud=" << baud << " Timeout=" << timeout << std::endl;
 
     if (type == "TWS") {
-        uint8_t dev_addr = (argc > 5) ? static_cast<uint8_t>(std::stoi(argv[5]))
+        uint8_t dev_addr = (argc > 5) ? static_cast<uint8_t>(std::stoi(argv[5], nullptr, 0))
                                        : 0x01;
         tws_bms::BmsProtocol proto(port, baud, timeout, dev_addr);
         run_daemon(proto, port, "/tmp/bms.sock");
     } else if (type == "GF") {
-        uint8_t dev_addr = (argc > 5) ? static_cast<uint8_t>(std::stoi(argv[5]))
+        uint8_t dev_addr = (argc > 5) ? static_cast<uint8_t>(std::stoi(argv[5], nullptr, 0))
                                        : 0x03;
         gf_bms::GfBmsProtocol proto(port, baud, timeout, dev_addr);
         run_daemon(proto, port, "/tmp/gf_bms.sock");
