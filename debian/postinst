@@ -5,6 +5,29 @@ set -e
 ln -sf /opt/roboparty/bin/bms_daemon /usr/bin/bms_daemon
 ln -sf /opt/roboparty/bin/bms_ota.py /usr/bin/bms_ota.py
 
+HOSTNAME=$(cat /etc/hostname 2>/dev/null)
+
+case "$HOSTNAME" in
+    robopi1)
+        sed -i -e 's/@BMS_PORT@/can0/' \
+               -e 's/@BMS_TYPE@/GFCAN/' \
+               -e 's/@BMS_ADDR@/0x03/' \
+               /etc/default/bms_daemon
+        ;;
+    robopi2)
+        sed -i -e 's/@BMS_PORT@/\/dev\/serial_tws/' \
+               -e 's/@BMS_TYPE@/TWS/' \
+               -e 's/@BMS_ADDR@/0x01/' \
+               /etc/default/bms_daemon
+        ;;
+    *)
+        sed -i -e 's/@BMS_PORT@/\/dev\/ttyUSB1/' \
+               -e 's/@BMS_TYPE@/GF/' \
+               -e 's/@BMS_ADDR@/0x03/' \
+               /etc/default/bms_daemon
+        ;;
+esac
+
 systemctl daemon-reload
 systemctl enable bms.service
 systemctl start bms.service || true

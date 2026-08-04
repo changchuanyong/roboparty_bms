@@ -193,19 +193,6 @@ int main(int argc, char** argv) {
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
 
-    /* Check device name - robopi1 has no BMS */
-    char hostname[256];
-    if (gethostname(hostname, sizeof(hostname)) == 0) {
-        if (strcmp(hostname, "robopi1") == 0) {
-            std::cout << "[BMS Daemon] Device 'robopi1' detected. "
-                      << "No BMS present. Entering sleep mode..." << std::endl;
-            while (g_running) {
-                std::this_thread::sleep_for(std::chrono::hours(24));
-            }
-            return 0;
-        }
-    }
-
     /* Get arguments or use defaults */
     std::string port = (argc > 1) ? argv[1] : "/dev/ttyUSB0";
     std::string type = "TWS";
