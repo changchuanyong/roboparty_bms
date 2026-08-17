@@ -15,7 +15,7 @@ case "$HOSTNAME" in
                /etc/default/bms_daemon
         ;;
     robopi2)
-        sed -i -e 's/@BMS_PORT@/\/dev\/serial_tws/' \
+        sed -i -e 's/@BMS_PORT@/\/dev\/ttyS3/' \
                -e 's/@BMS_TYPE@/TWS/' \
                -e 's/@BMS_ADDR@/0x01/' \
                /etc/default/bms_daemon
