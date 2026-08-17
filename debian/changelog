@@ -1,3 +1,9 @@
+roboparty-bms (1.4.2-1) stable; urgency=medium
+
+  * change bms serial
+
+ -- wentywenty <2321901849@qq.com>  Mon, 17 Aug 2026 18:18:18 +0800
+ 
 roboparty-bms (1.4.1-1) stable; urgency=medium
 
   * add two bms chosen
