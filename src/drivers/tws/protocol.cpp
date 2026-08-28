@@ -187,6 +187,19 @@ bool BmsProtocol::read_capacity_info(bms::BatteryStatus& status) {
     return false;
 }
 
+bool BmsProtocol::read_io_state(bms::BatteryStatus& status) {
+    usleep(50000);
+    serial_.flush();
+    send_read_request(REG_IO_CONTROL, 2);
+    std::vector<uint8_t> buf;
+    if (read_response(buf, 9)) {
+        status.io_state = get_u32(buf, 3);
+        status.power_on = (status.io_state & 0x0A) == 0x0A ? 1 : 0;
+        return true;
+    }
+    return false;
+}
+
 bool BmsProtocol::read_serial_number(std::string& sn) {
     serial_.flush();
     send_read_request(0x9016, 16);

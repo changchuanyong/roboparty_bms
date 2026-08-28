@@ -155,6 +155,16 @@ uint32_t TwsBmsDriver::get_cycles() const {
     return cached_.cycles;
 }
 
+uint32_t TwsBmsDriver::get_io_state() const {
+    std::shared_lock lock(data_mutex_);
+    return cached_.io_state;
+}
+
+bool TwsBmsDriver::is_power_on() const {
+    std::shared_lock lock(data_mutex_);
+    return cached_.power_on != 0;
+}
+
 bool TwsBmsDriver::is_connected() const {
     return connected_.load();
 }

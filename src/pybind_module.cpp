@@ -36,6 +36,8 @@ PYBIND11_MODULE(bms_py, m) {
         .def("get_min_cell_voltage", &BmsDriver::get_min_cell_voltage)
         .def("get_soh", &BmsDriver::get_soh)
         .def("get_cycles", &BmsDriver::get_cycles)
+        .def("get_io_state", &BmsDriver::get_io_state)
+        .def("is_power_on", &BmsDriver::is_power_on)
         .def("is_connected", &BmsDriver::is_connected);
 
     py::class_<NrfPmicDriver, BmsDriver, std::shared_ptr<NrfPmicDriver>>(m, "NrfPmicDriver")

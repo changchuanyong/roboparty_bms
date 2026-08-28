@@ -249,6 +249,8 @@ bool GfBmsProtocol::read_capacity_info(bms::BatteryStatus& status) {
     return true;
 }
 
+bool GfBmsProtocol::read_io_state(bms::BatteryStatus&) { return false; }
+
 bool GfBmsProtocol::read_serial_number(std::string& sn) {
     flush();
     usleep(10000);

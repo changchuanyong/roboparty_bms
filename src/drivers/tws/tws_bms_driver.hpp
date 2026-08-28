@@ -36,6 +36,8 @@ class TwsBmsDriver : public BmsDriver {
     double get_min_cell_voltage() const override;
     uint16_t get_soh() const override;
     uint32_t get_cycles() const override;
+    uint32_t get_io_state() const override;
+    bool is_power_on() const override;
     bool is_connected() const override;
 
    private:
