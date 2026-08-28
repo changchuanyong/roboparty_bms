@@ -1,3 +1,9 @@
+roboparty-bms (1.4.4-1) stable; urgency=medium
+
+  * Add TWS battery IO state and power status detection.
+
+ -- changchuanyong <1984715306@qq.com>  Fri, 28 Aug 2026 18:57:37 +0800
+
 roboparty-bms (1.4.3-1) stable; urgency=medium
 
   * Improve BMS OTA handling
