@@ -79,8 +79,9 @@ static void run_daemon(Protocol& proto, const std::string& port,
         bool ok_basic = proto.read_basic_info(raw_data);
         usleep(50000);
         bool ok_capacity = proto.read_capacity_info(raw_data);
+        bool ok_io_state = proto.read_io_state(raw_data);
 
-        if (ok_basic || ok_capacity) {
+        if (ok_basic || ok_capacity || ok_io_state) {
             failure_count = 0;
 
             if (ok_basic) {
@@ -98,11 +99,20 @@ static void run_daemon(Protocol& proto, const std::string& port,
                 status_to_send.capacity = raw_data.capacity;
                 status_to_send.soh = raw_data.soh;
             }
+            if (ok_io_state) {
+                status_to_send.io_state = raw_data.io_state;
+                status_to_send.power_on = raw_data.power_on;
+            }
 
             std::cout << "[BMS Data] Voltage: " << status_to_send.voltage
                       << "V | Current: " << status_to_send.current
                       << "A | SoC: " << status_to_send.percentage * 100.0
-                      << "%" << std::endl;
+                      << "%";
+            if (ok_io_state) {
+                std::cout << " | Power: "
+                          << (status_to_send.power_on ? "ON" : "OFF");
+            }
+            std::cout << std::endl;
 
             for (auto it = clients.begin(); it != clients.end();) {
                 if (write(*it, &status_to_send, sizeof(status_to_send)) < 0) {

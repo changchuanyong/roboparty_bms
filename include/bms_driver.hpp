@@ -41,6 +41,8 @@ struct BatteryStatus {
     uint16_t hw_version;
     uint16_t soh;
     uint32_t cycles;
+    uint32_t io_state;
+    uint8_t power_on;
 };
 #pragma pack(pop)
 
@@ -75,6 +77,8 @@ class BmsDriver {
     virtual double get_min_cell_voltage() const = 0;
     virtual uint16_t get_soh() const = 0;
     virtual uint32_t get_cycles() const = 0;
+    virtual uint32_t get_io_state() const { return 0; }
+    virtual bool is_power_on() const { return false; }
     virtual bool is_connected() const = 0;
 
    protected:
@@ -96,6 +100,7 @@ public:
     bool read_basic_info(bms::BatteryStatus& status);
     bool read_version_info(bms::BatteryStatus& status);
     bool read_capacity_info(bms::BatteryStatus& status);
+    bool read_io_state(bms::BatteryStatus& status);
     bool read_serial_number(std::string& sn);
     bool set_discharge_output(bool enable);
 
@@ -135,6 +140,7 @@ public:
     bool read_basic_info(bms::BatteryStatus& status);
     bool read_version_info(bms::BatteryStatus& status);
     bool read_capacity_info(bms::BatteryStatus& status);
+    bool read_io_state(bms::BatteryStatus& status);
     bool read_serial_number(std::string& sn);
     bool set_discharge_output(bool enable);
 
