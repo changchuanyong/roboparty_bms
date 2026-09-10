@@ -75,7 +75,7 @@ static void run_daemon(Protocol& proto, const std::string& port,
     int failure_count = 0;
 
     while (g_running) {
-        bms::BatteryStatus raw_data;
+        bms::BatteryStatus raw_data{};
         bool ok_basic = proto.read_basic_info(raw_data);
         usleep(50000);
         bool ok_capacity = proto.read_capacity_info(raw_data);
@@ -92,16 +92,23 @@ static void run_daemon(Protocol& proto, const std::string& port,
                 status_to_send.work_state = raw_data.work_state;
                 status_to_send.max_cell_voltage = raw_data.max_cell_voltage;
                 status_to_send.min_cell_voltage = raw_data.min_cell_voltage;
+                status_to_send.cycles = raw_data.cycles;
             }
             if (ok_capacity) {
                 status_to_send.percentage = raw_data.percentage;
                 status_to_send.charge = raw_data.charge;
                 status_to_send.capacity = raw_data.capacity;
+                status_to_send.design_capacity = raw_data.design_capacity;
                 status_to_send.soh = raw_data.soh;
             }
             if (ok_io_state) {
                 status_to_send.io_state = raw_data.io_state;
                 status_to_send.power_on = raw_data.power_on;
+                // 0x31 单体电压兜底：仅基础查询失败时转发，避免覆盖 0x61 正常极值
+                if (!ok_basic && raw_data.max_cell_voltage > 0.0) {
+                    status_to_send.max_cell_voltage = raw_data.max_cell_voltage;
+                    status_to_send.min_cell_voltage = raw_data.min_cell_voltage;
+                }
             }
 
             std::cout << "[BMS Data] Voltage: " << status_to_send.voltage
@@ -236,6 +243,10 @@ int main(int argc, char** argv) {
                                        : 0x03;
         gf_bms::GfBmsProtocol proto(port, baud, timeout, dev_addr);
         run_daemon(proto, port, "/tmp/gf_bms.sock");
+    } else if (type == "SCUD485") {
+        // 协议为点对点帧（无设备地址），波特率规定 19200
+        scud_bms::ScudBmsProtocol proto(port, baud, timeout);
+        run_daemon(proto, port, "/tmp/bms.sock");
     } else if (type == "GFCAN") {
         std::string socket_path = (argc > 2) ? argv[2] : "/tmp/can_bms.sock";
         run_can_daemon(port, socket_path);

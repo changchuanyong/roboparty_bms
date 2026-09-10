@@ -167,3 +167,44 @@ private:
 };
 
 } // namespace gf_bms
+
+namespace scud_bms {
+
+class ScudBmsProtocol {
+public:
+    ScudBmsProtocol(const std::string& port_name, int baud_rate,
+                    int timeout_ms = 500);
+    ~ScudBmsProtocol();
+
+    bool open();
+    void close_port();
+    bool is_open() const;
+
+    bool read_basic_info(bms::BatteryStatus& status);
+    bool read_version_info(bms::BatteryStatus& status);
+    bool read_capacity_info(bms::BatteryStatus& status);
+    bool read_io_state(bms::BatteryStatus& status);
+    bool read_serial_number(std::string& sn);
+    bool set_discharge_output(bool enable);
+
+private:
+    bms::SerialPort serial_;
+    std::string port_name_;
+    int baud_rate_;
+    int timeout_ms_;
+
+    void flush();
+    uint16_t crc16_ccitt(const uint8_t* data, size_t len);
+    bool send_query(uint8_t cmd);
+    bool read_frame(std::vector<uint8_t>& data, uint8_t expect_cmd,
+                    int expect_len);
+    bool query_0x61(std::vector<uint8_t>& data);
+    bool query_0x31(std::vector<uint8_t>& data);
+
+    uint16_t get_u16_be(const uint8_t* buf, int offset);
+    int16_t get_i16_be(const uint8_t* buf, int offset);
+    uint16_t get_u16_be(const std::vector<uint8_t>& buf, int offset);
+    int16_t get_i16_be(const std::vector<uint8_t>& buf, int offset);
+};
+
+} // namespace scud_bms
